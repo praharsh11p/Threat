@@ -1,306 +1,135 @@
 {
   "summary": {
-    "title": "Gandalf Prompt Injection Testing App",
-    "owner": "SSE Group Assignment",
-    "description": "Threat model for a Gandalf-like LLM-based application that tests prompt injection attacks.",
-    "id": 1
+    "title": "LLM Prompt Injection Testing Platform",
+    "owner": "Security Project Group",
+    "description": "Threat model for a Gandalf-like LLM application designed to evaluate prompt injection attacks against a large language model.",
+    "id": 0
   },
   "detail": {
-    "contributors": [],
+    "contributors": [
+      "Group Member 1",
+      "Group Member 2",
+      "Group Member 3"
+    ],
     "diagrams": [
       {
+        "title": "LLM Application Data Flow Diagram",
         "id": 0,
-        "title": "Diagram 1",
         "diagramType": "STRIDE",
-        "version": "2.2.0",
         "cells": [
           {
-            "type": "tm.BoundaryBox",
-            "size": { "width": 630, "height": 480 },
-            "position": { "x": 50, "y": 50 },
-            "attrs": { "line": { "stroke": "#333333", "strokeDasharray": "7 5" }, "label": { "text": "Internet Boundary" } },
-            "id": "boundary-internet", "zIndex": 1
-          },
-          {
-            "type": "tm.BoundaryBox",
-            "size": { "width": 250, "height": 380 },
-            "position": { "x": 190, "y": 100 },
-            "attrs": { "line": { "stroke": "#0050ef", "strokeDasharray": "7 5" }, "label": { "text": "Frontend" } },
-            "id": "boundary-frontend", "zIndex": 2
-          },
-          {
-            "type": "tm.BoundaryBox",
-            "size": { "width": 310, "height": 380 },
-            "position": { "x": 455, "y": 100 },
-            "attrs": { "line": { "stroke": "#2e7d32", "strokeDasharray": "7 5" }, "label": { "text": "Backend" } },
-            "id": "boundary-backend", "zIndex": 2
-          },
-          {
-            "type": "tm.BoundaryBox",
-            "size": { "width": 180, "height": 380 },
-            "position": { "x": 780, "y": 100 },
-            "attrs": { "line": { "stroke": "#c62828", "strokeDasharray": "7 5" }, "label": { "text": "Security & Trust Boundaries" } },
-            "id": "boundary-security", "zIndex": 2
-          },
-          {
-            "type": "tm.Actor",
-            "size": { "width": 112, "height": 60 },
-            "position": { "x": 70, "y": 240 },
-            "attrs": { "text": { "text": "User" } },
-            "id": "actor-user", "zIndex": 10,
-            "data": { "name": "User", "description": "External user trying to extract the secret via prompt injection", "outOfScope": false, "hasOpenThreats": false, "threats": [] }
+            "type": "tm.External",
+            "name": "Security Tester",
+            "description": "User attempting prompt injection attacks through the web interface.",
+            "id": "ext1"
           },
           {
             "type": "tm.Process",
-            "size": { "width": 112, "height": 60 },
-            "position": { "x": 240, "y": 160 },
-            "attrs": { "text": { "text": "Web Browser" } },
-            "id": "process-webbrowser", "zIndex": 10,
-            "data": {
-              "name": "Web Browser",
-              "description": "Client-side web browser that renders the application UI",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t1", "title": "XSS Attack on Web Browser", "type": "Elevation of Privilege", "status": "Open", "severity": "High", "description": "Attacker injects malicious scripts into the web browser to steal session tokens.", "mitigation": "Implement CSP, output encoding, and strict input validation." }
-              ]
-            }
+            "name": "Web Client Interface",
+            "description": "Browser-based UI where users submit prompts and view responses.",
+            "id": "proc1"
           },
           {
             "type": "tm.Process",
-            "size": { "width": 112, "height": 60 },
-            "position": { "x": 240, "y": 320 },
-            "attrs": { "text": { "text": "API Gateway" } },
-            "id": "process-apigateway", "zIndex": 10,
-            "data": {
-              "name": "API Gateway",
-              "description": "Routes HTTPS requests, enforces auth and rate limiting",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t2", "title": "Spoofing the API Gateway Process", "type": "Spoofing", "status": "Open", "severity": "High", "description": "API Gateway may be spoofed leading to unauthorized LLM access.", "mitigation": "Mutual TLS, strong verification, anomaly monitoring." },
-                { "id": "t3", "title": "API Gateway DoS", "type": "Denial of Service", "status": "Open", "severity": "High", "description": "API Gateway overwhelmed with requests.", "mitigation": "Rate limiting, traffic filtering, service redundancy." }
-              ]
-            }
+            "name": "Application API Server",
+            "description": "Backend service responsible for routing requests and coordinating system components.",
+            "id": "proc2"
           },
           {
             "type": "tm.Process",
-            "size": { "width": 112, "height": 60 },
-            "position": { "x": 490, "y": 140 },
-            "attrs": { "text": { "text": "LLM" } },
-            "id": "process-llm", "zIndex": 10,
-            "data": {
-              "name": "LLM",
-              "description": "Core AI component processing prompts and protecting the secret",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t4", "title": "Prompt Injection Attack on LLM", "type": "Tampering", "status": "Open", "severity": "High", "description": "Crafted prompts bypass safety instructions to leak the secret.", "mitigation": "Prompt validation, output filtering, sandboxed LLM execution." },
-                { "id": "t5", "title": "LLM Remote Code Execution", "type": "Elevation of Privilege", "status": "Open", "severity": "High", "description": "API Gateway may remotely execute code for LLM.", "mitigation": "Least privilege access, security audits, multi-step authentication." },
-                { "id": "t6", "title": "Elevation Using Impersonation in LLM", "type": "Elevation of Privilege", "status": "Open", "severity": "High", "description": "LLM impersonates API Gateway to gain additional privilege.", "mitigation": "Mutual TLS authentication to prevent impersonation." }
-              ]
-            }
+            "name": "Prompt Security Filter",
+            "description": "Analyzes prompts to detect prompt injection patterns and malicious input.",
+            "id": "proc3"
           },
           {
             "type": "tm.Process",
-            "size": { "width": 140, "height": 60 },
-            "position": { "x": 615, "y": 140 },
-            "attrs": { "text": { "text": "Prompt Injection Tester" } },
-            "id": "process-pitester", "zIndex": 10,
-            "data": {
-              "name": "Prompt Injection Tester",
-              "description": "Automated tester running injection test cases against LLM",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t7", "title": "Elevation Using Impersonation - PI Tester", "type": "Elevation of Privilege", "status": "Open", "severity": "Medium", "description": "PI Tester impersonates LLM context to gain privilege.", "mitigation": "Sandboxing, privilege separation, mandatory access control." }
-              ]
-            }
+            "name": "LLM Processing Engine",
+            "description": "Large Language Model responsible for generating responses based on sanitized prompts.",
+            "id": "proc4"
           },
           {
-            "type": "tm.Process",
-            "size": { "width": 140, "height": 60 },
-            "position": { "x": 480, "y": 245 },
-            "attrs": { "text": { "text": "Authentication Service" } },
-            "id": "process-authservice", "zIndex": 10,
-            "data": {
-              "name": "Authentication Service",
-              "description": "Handles login, token generation, and session validation",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t8", "title": "Authentication Service Crash", "type": "Denial of Service", "status": "Open", "severity": "High", "description": "Auth Service crashes violating availability metric.", "mitigation": "Redundancy and robust error handling." },
-                { "id": "t9", "title": "Authentication Service RCE", "type": "Elevation of Privilege", "status": "Open", "severity": "High", "description": "API Gateway remotely executes code for Auth Service.", "mitigation": "Strong authentication and role-based access controls." }
-              ]
-            }
+            "type": "tm.Datastore",
+            "name": "Prompt Activity Database",
+            "description": "Stores prompts, detected attacks, and interaction logs.",
+            "id": "db1"
           },
           {
-            "type": "tm.Process",
-            "size": { "width": 130, "height": 60 },
-            "position": { "x": 487, "y": 350 },
-            "attrs": { "text": { "text": "Logging Service" } },
-            "id": "process-logging", "zIndex": 10,
-            "data": {
-              "name": "Logging Service",
-              "description": "Records security events and user interactions for auditing",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t10", "title": "Log Tampering by Attacker", "type": "Tampering", "status": "Open", "severity": "High", "description": "Attacker manipulates log entries to hide unauthorized access.", "mitigation": "Immutable logging, cryptographic signing of log entries." },
-                { "id": "t11", "title": "Data Repudiation by Logging Service", "type": "Repudiation", "status": "Open", "severity": "Medium", "description": "Logging Service claims it did not receive data from outside trust boundary.", "mitigation": "Non-repudiation mechanisms, secure logging, tamper-proof records." }
-              ]
-            }
-          },
-          {
-            "type": "tm.Store",
-            "size": { "width": 112, "height": 60 },
-            "position": { "x": 490, "y": 420 },
-            "attrs": { "text": { "text": "Database" } },
-            "id": "store-database", "zIndex": 10,
-            "data": {
-              "name": "Database",
-              "description": "Stores user data, LLM results, prompt test results, and audit logs",
-              "outOfScope": false, "hasOpenThreats": true, "isEncrypted": true, "isSigned": false,
-              "threats": [
-                { "id": "t12", "title": "SQL Injection on Database", "type": "Tampering", "status": "Open", "severity": "High", "description": "Attacker tampers with Database via SQL injection.", "mitigation": "Parameterized queries, ORM frameworks, input validation." },
-                { "id": "t13", "title": "Spoofing of Destination Data Store Database", "type": "Spoofing", "status": "Open", "severity": "Medium", "description": "Database spoofed, data written to attacker's target.", "mitigation": "Mutual authentication and digital certificates." },
-                { "id": "t14", "title": "Weak Access Control for Database", "type": "Information Disclosure", "status": "Open", "severity": "High", "description": "Improper data protection allows attacker to read sensitive info.", "mitigation": "Encryption, strict access control, continuous monitoring." }
-              ]
-            }
-          },
-          {
-            "type": "tm.Process",
-            "size": { "width": 140, "height": 60 },
-            "position": { "x": 790, "y": 160 },
-            "attrs": { "text": { "text": "Access control & RBAC" } },
-            "id": "process-rbac", "zIndex": 10,
-            "data": {
-              "name": "Access control & RBAC",
-              "description": "Enforces role-based access control for all system resources",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t15", "title": "Data Repudiation by Access control & RBAC", "type": "Repudiation", "status": "Open", "severity": "Low", "description": "RBAC claims it did not receive data from outside trust boundary.", "mitigation": "Logging and auditing to record data transactions." },
-                { "id": "t16", "title": "RBAC Remote Code Execution", "type": "Elevation of Privilege", "status": "Open", "severity": "Medium", "description": "Database remotely executes code for RBAC.", "mitigation": "Sandboxing, privilege separation, mandatory access control." }
-              ]
-            }
-          },
-          {
-            "type": "tm.Process",
-            "size": { "width": 140, "height": 60 },
-            "position": { "x": 790, "y": 330 },
-            "attrs": { "text": { "text": "Security Monitoring" } },
-            "id": "process-secmon", "zIndex": 10,
-            "data": {
-              "name": "Security Monitoring",
-              "description": "Monitors security events, detects anomalies, and triggers alerts",
-              "outOfScope": false, "hasOpenThreats": true,
-              "threats": [
-                { "id": "t17", "title": "Elevation in Security Monitoring", "type": "Elevation of Privilege", "status": "Open", "severity": "Medium", "description": "Attacker passes data into Security Monitoring to change execution flow.", "mitigation": "Least privilege access, security audits, multi-step authentication." },
-                { "id": "t18", "title": "Data Repudiation by Security Monitoring", "type": "Repudiation", "status": "Open", "severity": "Medium", "description": "Security Monitoring claims it did not receive data from outside trust boundary.", "mitigation": "Blockchain-based logging, immutable audit trails, real-time alerting." }
-              ]
-            }
+            "type": "tm.Datastore",
+            "name": "Response Cache",
+            "description": "Temporary storage for previously generated LLM responses.",
+            "id": "db2"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "actor-user" }, "target": { "cell": "process-webbrowser" },
-            "id": "flow-sends-request", "zIndex": 5,
-            "data": { "name": "Sends Request", "description": "User sends request via browser", "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS",
-              "threats": [
-                { "id": "t19", "title": "Data Flow Sends Request Is Potentially Interrupted", "type": "Denial of Service", "status": "Open", "severity": "High", "description": "External agent interrupts data flowing across trust boundary.", "mitigation": "Rate limiting, traffic filtering, service redundancy." }
-              ]
-            }
+            "name": "Prompt Submission",
+            "source": "ext1",
+            "target": "proc1"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-webbrowser" }, "target": { "cell": "actor-user" },
-            "id": "flow-web-response", "zIndex": 5,
-            "data": { "name": "Web Response", "description": "App response to user browser", "isEncrypted": true, "isPublicNetwork": true, "protocol": "HTTPS",
-              "threats": [
-                { "id": "t20", "title": "Data Flow Web Response Is Potentially Interrupted", "type": "Denial of Service", "status": "Open", "severity": "High", "description": "External agent interrupts data flowing across trust boundary.", "mitigation": "Rate limiting, traffic filtering, service redundancy." },
-                { "id": "t21", "title": "User Potentially Denies Receiving Data", "type": "Repudiation", "status": "Open", "severity": "Low", "description": "User claims it did not receive data from process on other side of trust boundary.", "mitigation": "Non-repudiation mechanisms and secure logging." }
-              ]
-            }
+            "name": "HTTPS Request",
+            "source": "proc1",
+            "target": "proc2"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-webbrowser" }, "target": { "cell": "process-apigateway" },
-            "id": "flow-https-request", "zIndex": 5,
-            "data": { "name": "HTTPS request", "description": "Encrypted request from browser to API gateway", "isEncrypted": true, "isPublicNetwork": false, "protocol": "HTTPS",
-              "threats": [
-                { "id": "t22", "title": "XSS & CSRF Attacks", "type": "Elevation of Privilege", "status": "Open", "severity": "High", "description": "CSRF forces browser to make forged requests to API gateway.", "mitigation": "CSRF tokens, SameSite cookies, Origin header verification." }
-              ]
-            }
+            "name": "Prompt Validation Request",
+            "source": "proc2",
+            "target": "proc3"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-apigateway" }, "target": { "cell": "process-llm" },
-            "id": "flow-routes-to", "zIndex": 5,
-            "data": { "name": "Routes to", "description": "API Gateway routes validated request to LLM", "isEncrypted": true, "isPublicNetwork": false, "protocol": "Internal API",
-              "threats": [
-                { "id": "t23", "title": "Data Flow Sniffing on Routes to", "type": "Information Disclosure", "status": "Open", "severity": "High", "description": "Data flowing across Routes to may be sniffed by attacker.", "mitigation": "Encrypt with TLS, strict access control, continuous monitoring." }
-              ]
-            }
+            "name": "Sanitized Prompt",
+            "source": "proc3",
+            "target": "proc4"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-apigateway" }, "target": { "cell": "process-authservice" },
-            "id": "flow-user-auth", "zIndex": 5,
-            "data": { "name": "User Authentication", "isEncrypted": true, "isPublicNetwork": false, "protocol": "Internal API", "threats": [] }
+            "name": "Model Response",
+            "source": "proc4",
+            "target": "proc2"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-apigateway" }, "target": { "cell": "process-logging" },
-            "id": "flow-logs-request", "zIndex": 5,
-            "data": { "name": "Logs Request", "isEncrypted": false, "isPublicNetwork": false, "protocol": "Internal API", "threats": [] }
+            "name": "Interaction Logs",
+            "source": "proc2",
+            "target": "db1"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-apigateway" }, "target": { "cell": "store-database" },
-            "id": "flow-sql-dos", "zIndex": 5,
-            "data": { "name": "SQL Injection, DOS", "isEncrypted": true, "isPublicNetwork": false, "protocol": "HTTPS", "threats": [] }
+            "name": "Cached Response",
+            "source": "proc4",
+            "target": "db2"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-llm" }, "target": { "cell": "process-pitester" },
-            "id": "flow-prompt-inj-tests", "zIndex": 5,
-            "data": { "name": "Prompt Injection Tests", "isEncrypted": false, "isPublicNetwork": false, "protocol": "Internal API", "threats": [] }
+            "name": "Response Delivery",
+            "source": "proc2",
+            "target": "proc1"
           },
           {
             "type": "tm.Flow",
-            "source": { "cell": "process-pitester" }, "target": { "cell": "process-llm" },
-            "id": "flow-prompt-injection", "zIndex": 5,
-            "data": { "name": "Prompt Injection", "isEncrypted": false, "isPublicNetwork": false, "protocol": "Internal API", "threats": [] }
+            "name": "Displayed Output",
+            "source": "proc1",
+            "target": "ext1"
           },
           {
-            "type": "tm.Flow",
-            "source": { "cell": "process-llm" }, "target": { "cell": "store-database" },
-            "id": "flow-stores-results", "zIndex": 5,
-            "data": { "name": "Stores results", "isEncrypted": true, "isPublicNetwork": false, "protocol": "DB", "threats": [] }
+            "type": "tm.Boundary",
+            "name": "Public Internet Boundary",
+            "description": "Separates external users from internal application services.",
+            "id": "boundary1"
           },
           {
-            "type": "tm.Flow",
-            "source": { "cell": "process-logging" }, "target": { "cell": "store-database" },
-            "id": "flow-logs-security-events", "zIndex": 5,
-            "data": { "name": "Logs Security Events", "isEncrypted": false, "isPublicNetwork": false, "protocol": "DB", "threats": [] }
-          },
-          {
-            "type": "tm.Flow",
-            "source": { "cell": "process-logging" }, "target": { "cell": "process-secmon" },
-            "id": "flow-log-tampering", "zIndex": 5,
-            "data": { "name": "Log Tampering, Data Repudiation", "isEncrypted": false, "isPublicNetwork": false, "protocol": "Binary", "threats": [] }
-          },
-          {
-            "type": "tm.Flow",
-            "source": { "cell": "process-secmon" }, "target": { "cell": "process-logging" },
-            "id": "flow-monitored-by", "zIndex": 5,
-            "data": { "name": "Monitored by", "isEncrypted": false, "isPublicNetwork": false, "protocol": "Binary", "threats": [] }
-          },
-          {
-            "type": "tm.Flow",
-            "source": { "cell": "store-database" }, "target": { "cell": "process-rbac" },
-            "id": "flow-restricted-access", "zIndex": 5,
-            "data": { "name": "Restricted access", "isEncrypted": true, "isPublicNetwork": false, "protocol": "HTTPS",
-              "threats": [
-                { "id": "t24", "title": "PHI at Rest Tampering", "type": "Tampering", "status": "Open", "severity": "High", "description": "Attackers modify sensitive data at rest.", "mitigation": "Cryptographic signing to protect sensitive data at rest." }
-              ]
-            }
+            "type": "tm.Boundary",
+            "name": "Internal AI Infrastructure",
+            "description": "Protects AI model processing and storage components.",
+            "id": "boundary2"
           }
         ]
       }
-    ]
+    ],
+    "diagramTop": 0,
+    "reviewer": "Course Instructor",
+    "threatTop": 0
   }
 }
